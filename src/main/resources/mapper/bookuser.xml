@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="org.iclass.mvc.dao.BookUserMapper">
+ 	
+ 	<select id="login" parameterType="java.util.Map" resultType="org.iclass.mvc.dto.BookUser">
+ 		select * 
+ 		from 
+ 			bookuser
+		where id=#{id} and password = #{password}
+ 	</select>
+ 	<insert id="join">
+ 	insert into bookuser
+ 	values
+ 	(#{id},#{name},#{email},0,sysdate,#{password})
+ 	<!-- 컬럼명 생략했을 때 values의 순서가 컬럼의 순서와 일치해야 합니다.  -->
+ 	</insert>
+ </mapper>
+
+ 
+ 
+ 
+ 
+ 
