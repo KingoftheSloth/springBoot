@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title>우리 북카페</title>
+    <link rel="stylesheet" th:href="@{/css/read.css?v=3}">
+</head>
+<body>
+<main id="read">
+    <h3>북챗 :: 커뮤니티</h3>
+    <p>오늘 무슨 책을 읽으셨나요? </p>
+    <hr style="color:white;">
+    <div style="width: 80%; margin: auto; max-width: 760px;">
+        <ul id="table">
+            <li>
+                <ul class="row">
+                    <li>제목</li>
+                    <li th:text="${vo.title}"></li>
+                    <li>조회수</li>
+                    <li th:text="${vo.readCount}"></li>
+                </ul>
+            </li>
+            <li>
+                <ul class="row">
+                    <li>작성자</li>
+                    <li th:text="${vo.writer}"></li>
+                    <li>작성날짜</li>
+                    <li><span th:text="${#dates.format(vo.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></li>
+                </ul>
+            </li>
+            <li id="content">
+                <ul>
+                    <li>내용</li>
+                    <li>
+                        <pre th:text="${vo.content}"></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div style="text-align: center; margin-bottom: 10px;">
+            <form action="" method="post">
+                <input type="hidden" name="idx" th:value="${vo.idx}">
+                <input type="hidden" name="page" th:value="${page}">
+                <a class="button" href="javascript:formexecute(1)">수정</a>
+                <a class="button" href="javascript:formexecute(2)">삭제</a>
+                <a class="button" th:href="@{'list?page=' + ${page}}">목록</a>
+            </form>
+        </div>
+        <script type="text/javascript">
+            if('${message}'.length !=0) alert('${message}');
+
+            function formexecute(f){
+                let url;
+                let message;
+                if(f===1){
+                    message='글 수정하시겠습니까?'
+                }else if(f===2){
+                    message='글 삭제하시겠습니까?'
+                }
+                const yn = confirm(message);
+                if(yn) {
+                    url = (f===1) ? 'update' : (f===2) ? 'delete' : '#';
+                    document.forms[0].action = url;
+                    document.forms[0].submit();
+                }else{
+                    alert('취소합니다.');
+                }
+            }
+        </script>
+
+        <!-- 메인글 출력 끝 -->
+        <hr>
+
+        <!-- 댓글 등록/삭제를 위한 form. 댓글 수정은 구현 안합니다. -->
+        <form action="comments" method="post">
+            <input type="hidden" name="mref" th:value="${vo.idx}">
+            <input type="hidden" name="idx" value="0">
+            <input type="hidden" name="ip" th:value="${#request.getRemoteAddr()}">
+            <input type="hidden" name="f" value="0">
+            <input type="hidden" name="page" th:value="${page}">
+            <ul>
+                <li>
+                    <ul class="row">
+                        <li>작성자</li>
+                        <li>
+                            <input name="writer" class="input" th:value="${sessionScope.user != null ? user.id : ''}" th:readonly="${sessionScope.user != null}">
+                            <button type="button" th:if="${sessionScope.user == null}" onclick="location.href='../login'">로그인</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul style="display: flex;">
+                        <li>
+                            <textarea rows="5" cols="80" name="content" style="resize:none;margin-right:20px;"
+                                      placeholder="로그인 후에 댓글을 작성하세요." class="input"></textarea>
+                        </li>
+                        <li style="align-self: center;margin-bottom: 20px;">
+                            <button type="button" th:if="${sessionScope.user != null}" onclick="executeCmt(1,0)">저장</button>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span>댓글</span>
+                    <span th:text="${vo.commentCount}"></span>
+                    <hr>
+                </li>
+                <c:forEach var="cmt" items="${cmtlist}">
+                    <li>
+                        <ul class="crow">
+                            <li th:text="${cmt.writer}"></li>
+                            <li th:text="${cmt.ip}"></li>
+                            <li>
+                                <span th:text="${#dates.format(cmt.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                            </li>
+                            <c:if test="${user.id==cmt.writer}">
+                                <li><a href="javascript:executeCmt(2,'${cmt.idx}')">삭제</a></li>
+                            </c:if>
+                        </ul>
+                    </li>
+                    <li>
+                        <pre class="cmtcontent" th:text="${cmt.content}"></pre>
+                    </li>
+                </c:forEach>
+            </ul>
+        </form>
+    </div>
+</main>
+<script type="text/javascript" th:inline="javascript">
+    function executeCmt(fval,cidx) {
+        const frm = document.forms[1]
+        if(fval===1){
+            if(frm.content.value===''){
+                alert('글 내용은 필수 입력입니다.')
+                frm.content.focus()
+                return
+            }else {
+                frm.f.value = fval
+                frm.submit()
+            }
+        }else if(fval===2){
+            const yn = confirm('댓글 삭제 하시겠습니까?')
+            if(yn) {
+                frm.f.value = fval
+                frm.idx.value = cidx
+                frm.submit()
+            }
+        }
+    }
+</script>
+</body>
+</html>

@@ -3,12 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>getMappingTest</title>
+    <link rel="stylesheet" th:href="@{/css/test.css}">
 </head>
 <body>
 <h3>타임리프 템플릿 : spring el 테스트</h3>
 <hr/>
 <h3 th:text="${message}"></h3> <!-- th: 속성이용하기 -->
-<h3>[[${message}]]</h3><!-- 인라인 표기 -->
+<!--반복문-->
+<ul>
+    <li th:each="temp:${list}" th:text="${temp}"></li>
+</ul>
+<hr/>
+<h3>타임리프 링크 link 테스트</h3>
+<ul>
+    <!-- /기호는 root-context path -->
+    <li><a th:href="@{/spring(name='메리',age=24)}">
+        Go Spring1
+    </a></li>
+    <!--결과 : http://localhost:8085/spring?name=momo&age=24-->
+<li><a th:href="@{spring(name='lion',age=24)}">Go spring2</a>
+</li>
 
+    <li><a th:href="@{spring}">Go spring3</a>
+    </li>
+
+    <!---->
+</ul>
+<hr/>
+<h3>[[${message}]]</h3><!-- 인라인 표기 -->
+<ul>
+    <th:block th:each="str,status:${list}">
+        <li>[[${str}]] - [[${status.index}]]</li>
+            </th:block>
+</ul>
 </body>
 </html>
