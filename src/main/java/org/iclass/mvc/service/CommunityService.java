@@ -34,7 +34,7 @@ public class CommunityService {
 
 	// 페이지 목록과 글 목록을 저장하는 DTO를 리턴 타입으로 합니다.
 	public PageResponseDTO listWithSearch(PageRequestDTO pageRequestDTO){
-		pageRequestDTO.setSize(5);
+		pageRequestDTO.setSize(3);
 		pageRequestDTO.setDates();
 		List<Community> list = dao.pagelist(pageRequestDTO);
 		PageResponseDTO responseDTO = PageResponseDTO.of(pageRequestDTO,dao.count(pageRequestDTO),10);

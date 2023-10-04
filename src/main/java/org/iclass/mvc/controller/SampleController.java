@@ -37,4 +37,10 @@ public class SampleController {
 	// required = false 로 하면 파라미터 값이 null 되어야하므로
 		// int,long 들은 Integer,Long 과 같이 래퍼(Wrapper) 타입으로 선언합니다.
 	}
+
+	@GetMapping("/ipcheck")
+	public void ipcheck(Model model) {
+		model.addAttribute("message","하이 스프링~!!!");
+		model.addAttribute("list", List.of("모모","나연","nana","쯔위"));
+	}
 }

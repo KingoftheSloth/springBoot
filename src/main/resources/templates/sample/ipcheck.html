@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IP 및 버전 정보 확인</title>
+</head>
+<body>
+<h1>현재 IP 및 버전 정보</h1>
+
+<p id="ip-info">IP 정보: 로딩 중...</p>
+<p id="ip-version-info">IP 버전 정보: 로딩 중...</p>
+
+<script>
+    // 현재 IP 주소 및 버전 정보 가져오기
+    fetch('https://api64.ipify.org?format=json') // IP 주소를 제공하는 공개 API 사용
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 오류: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const ipAddress = data.ip;
+            const ipVersion = ipAddress.includes(":") ? "6" : "4"; // IPv4 또는 IPv6를 판별
+            document.getElementById('ip-info').textContent = 'IP 정보: ' + ipAddress;
+            document.getElementById('ip-version-info').textContent = 'IP 버전 정보: IPv' + ipVersion;
+
+            // 콘솔에도 출력
+            console.log('IP 정보: ' + ipAddress);
+            console.log('IP 버전 정보: IPv' + ipVersion);
+        })
+        .catch(error => {
+            console.error('IP 정보를 가져오는 중 오류 발생:', error);
+            document.getElementById('ip-info').textContent = 'IP 정보를 가져오는 중 오류 발생';
+            document.getElementById('ip-version-info').textContent = 'IP 버전 정보를 가져오는 중 오류 발생';
+        });
+</script>
+</body>
+</html>
