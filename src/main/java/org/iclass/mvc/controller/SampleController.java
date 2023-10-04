@@ -21,11 +21,12 @@ public class SampleController {
 	}
 
 	@GetMapping("/spring")
-	public void spring(
+	public void spring(Community community,
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false)Integer age){
 		log.info("파라미터 name : {}" , name);
 		log.info("파라미터 age : {}" , age);
+		log.info("Community dto : {}", community); // Community 클래스의 모든 필드들이 파라미터로 전달될 수 있습니다.
 	// required = false 로 하면 파라미터 값이 null 되어야하므로
 		// int,long 들은 Integer,Long 과 같이 래퍼(Wrapper) 타입으로 선언합니다.
 	}
