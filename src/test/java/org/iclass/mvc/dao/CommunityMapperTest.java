@@ -22,8 +22,8 @@ CommunityMapper dao;
     @Test
     @DisplayName("저장된 글의 개수는 0 이 아닙니다.")
     void count() {
-    int count = dao.count();
-    log.info("커뮤니티 count: {}" , count);
+        int count = 0; // dao.count();
+        log.info("커뮤니티 count: {}" , count);
         Assertions.assertNotEquals(0,count);
     }
 
