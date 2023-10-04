@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" ㅣ xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout>
     <head>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" th:href="@{/assets/fav.ico}" />
@@ -55,6 +55,8 @@
         <!-- Core theme JS-->
         <script th:src="@{/assets/js/scripts.js}"></script>
         <!-- 자바스크립트가 들어갈 자리는 layout:fragment="script" 로 설정합니다. -->
-        <th:block layout:fragment="script"></th:block>
+        <th:block layout:fragment="script">
+
+        </th:block>
     </body>
 </html>

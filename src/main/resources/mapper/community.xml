@@ -14,13 +14,16 @@
  	<select id="pagelist" resultType="org.iclass.mvc.dto.Community" parameterType="java.util.Map">
  		SELECT * FROM 
 			(SELECT rownum r ,f.* FROM
-								(SELECT * FROM community  ORDER BY idx DESC) f)
+								(SELECT * FROM community
+								          <include refid="search"></include>
+								          ORDER BY idx DESC) f)
 		WHERE r BETWEEN #{start} AND #{end}
  	</select>
  	
  	
  	<select id="count" resultType="int">
  		SELECT count(*) FROM community
+ 		<include refid="search"></include>
  	</select>
  	
  	
@@ -70,6 +73,26 @@
 			from dual
 		</selectKey>	
  	</insert>
+
+	<sql id="search">
+<!-- types 파라미터가 있으면 쿼리 생성합니다. types는 배열이므로 foreach 태그로 하나씩 가져다가 if test 실행합니다.
+	types 예시는 {"t","c"}, {"t","c","w"},{"t"},{"c"} 를 하나씩 요소를 가져가 type 변수에 저장하고
+	비교 조건식에 따라 if 태그 안의 문자열을 추가합니다.
+-->
+<if test="types !=null and types.length >0">
+<foreach collection="types" item="type" open="(" close=")" separator=" OR ">
+<if test="type=='t',toString()"> title like '%' || #{keyword} || '%' </if>
+<if test="type=='w',toString()"> content like '%' || #{keyword} || '%' </if>
+<if test="type=='c',toString()"> writer like '%' || #{keyword} || '%' </if>
+</foreach>
+</if>
+<!-- 만약 날짜 타입을 이용해서 기간에 대한 조회를 구현한다면 필요할 수 있으므로 추가합니다. -->
+<if test="from!=null and to !=null">
+	<trim prefix="and">
+		createdAt between #{from} and #{to}
+	</trim>
+	</if>
+	</sql>
  </mapper>
  
  
