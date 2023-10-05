@@ -15,36 +15,37 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Welcome! Community - Read [[${dto.idx}]] 번
+                    Welcome! Community - write
                 </div>
                 <div class="card-body">
-                    <form action="" method="post">
+                    <form action="/community/write" method="post">
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">제목</span>
-                            <input name="title" class="form-control" th:value="${dto.title}" readonly>
+                            <input name="title" class="form-control">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">내용</span>
-                            <textarea name="content" class="form-control" rows="15" style="resize: none;" readonly>[[${dto.content}]]</textarea>
+                            <textarea name="content" class="form-control" rows="15" style="resize: none;"></textarea>
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">작성자</span>
-                            <input name="writer" class="form-control" th:value="${dto.writer}" readonly>
+                            <input name="writer" class="form-control">
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">작성날짜</span>
-                            <input name="createdAt" class="form-control" th:value="${#dates.format(dto.createdAt,'yyyy-MM-dd')}" readonly>
+                            <input name="createdAt" class="form-control">
                         </div>
-                        <div class="my-4" th:with="link=${pageRequestDTO.link}">
+                        <div class="my-4">
                             <!-- link 예시 : page=3&type=tc&keyword=hi   를 전달 받아 목록과 수정 클릭시 파라미터를 추가시킵니다.-->
                             <div class="float-end">
-                                <a th:href="|@{/community/list}?${link}|" class="text-decoration-none">
+                                <a th:href="|@{/community/list}|" class="text-decoration-none">
                                     <!-- href="/community/list?page=3&type=tc&keyword=hi"  로 만들어집니다.-->
                                     <button type="button" class="btn btn-primary">목록</button>
                                 </a>
-                                <a th:href="|@{/community/update(idx=${dto.idx})}&${link}|" class="text-decoration-none">
+                                <a th:href="@{/community/write}" class="text-decoration-none">
                                     <!-- href="/community/update?idx=999&page=3&type=tc&keyword=hi"  로 만들어집니다.-->
-                                    <button type="button" class="btn btn-secondary">수정</button>
+                                    <button type="button" class="btn btn-secondary">등록</button>
+                                </a>
                                 </a>
                             </div>
                         </div>

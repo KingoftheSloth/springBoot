@@ -57,7 +57,7 @@
                             <li><a th:href="|@{/community/read(idx=${vo.idx })}&${link}|" class="title">  <!-- 현재페이지 번호 전달 시작 -순서1) -->
                                 [[${vo.title}]]
                             </a>
-                                ..<span style="color:orange;font-size: 80%;">([[${vo.commentCount}]])
+                                <span style="color:orange;font-size: 80%;">([[${vo.commentCount}]])
 		 		</span></li>
                             <li>
                                 [[${vo.writer}]]
@@ -83,7 +83,7 @@
                 </th:block>
             </ul>
             <div style="float:right;margin:40px;">
-                <a th:onclick="|javascript:writee()|" class="button">글쓰기</a>
+                <a href="/community/write" class="button">글쓰기</a>
                 <!-- 	<a th:href="@{/}" class="button" >홈</a> -->
             </div>
         </div>
@@ -147,17 +147,9 @@
     function writee() {
         let yn
 
-        let userid = '[[${session.member}]]';
-
         let currentPage = '[[${pageRequestDTO.page }]]' ;
-
-        if(userid===null || userid === ''){
-            yn=confirm('글쓰기는 로그인이 필요합니다. 로그인 하시겠습니까?')
-            if(yn) location.href='../login?back=w'  // 로그인 후 글쓰기 url로 redirect 하기 위한 파라미터
-        }else{
-            location.href='write?page='+ currentPage
-        }
-    }
+sendRedirect
+           }
 
     const message = [[${alert}]];
     //객체(문자열 포함) 검사합니다. 양쪽에 '' 안에 넣으면 값이 없을떄 'null'

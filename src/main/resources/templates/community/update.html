@@ -15,17 +15,17 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Welcome! Community - Read [[${dto.idx}]] 번
+                    수정화면입니다 Read [[${dto.idx}]] 번
                 </div>
                 <div class="card-body">
-                    <form action="" method="post">
+                    <form action="community/update" method="post">
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">제목</span>
-                            <input name="title" class="form-control" th:value="${dto.title}" readonly>
+                            <input name="title" class="form-control" th:value="${dto.title}" >
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">내용</span>
-                            <textarea name="content" class="form-control" rows="15" style="resize: none;" readonly>[[${dto.content}]]</textarea>
+                            <textarea name="content" class="form-control" rows="15" style="resize: none;" >[[${dto.content}]]</textarea>
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">작성자</span>
@@ -42,9 +42,13 @@
                                     <!-- href="/community/list?page=3&type=tc&keyword=hi"  로 만들어집니다.-->
                                     <button type="button" class="btn btn-primary">목록</button>
                                 </a>
+                                <a th:href="|@{/community/delete}?${link}|" class="text-decoration-none">
+                                    <!-- href="/community/list?page=3&type=tc&keyword=hi"  로 만들어집니다.-->
+                                    <button type="button" class="btn btn-primary">삭제</button>
+                                </a>
                                 <a th:href="|@{/community/update(idx=${dto.idx})}&${link}|" class="text-decoration-none">
                                     <!-- href="/community/update?idx=999&page=3&type=tc&keyword=hi"  로 만들어집니다.-->
-                                    <button type="button" class="btn btn-secondary">수정</button>
+                                    <button type="submit" class="btn btn-secondary">수정</button>
                                 </a>
                             </div>
                         </div>
@@ -55,7 +59,5 @@
     </div>
 </div>
 <body>
-
 </body>
-
 </html>

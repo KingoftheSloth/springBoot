@@ -46,12 +46,46 @@ public class CoummunityController {
 	}
 
 	@GetMapping("/write")
-	public void write(){
-
+	public String write(Model model) {
+		PageRequestDTO pageRequestDTO = new PageRequestDTO();
+		model.addAttribute("pageRequestDTO", pageRequestDTO);
+		return "community/write";
 	}
+	@PostMapping("/write")
+	public String save(@ModelAttribute Community dto, RedirectAttributes reAttr) {
+		log.info("dto: {}", dto);
+		service.insert(dto);
+		reAttr.addFlashAttribute("message", "글 등록이 완료되었습니다.");
+		return "redirect:/community/list";
+	}
+
 	@GetMapping("/read")
 	public void read(PageRequestDTO pageRequestDTO, long idx, Model model){
 		Community community = service.read(idx);
 		model.addAttribute("dto",community);
+	}
+
+	@GetMapping("/update")
+	public void update(PageRequestDTO pageRequestDTO, long idx, Model model){
+		Community community = service.selectByIdx(idx);
+		model.addAttribute("dto",community);
+	}
+	@PostMapping("/update")
+	public String save(@ModelAttribute("dto") Community dto) {
+		String updatedTitle = dto.getTitle();
+		String updatedContent = dto.getContent();
+
+		dto.setTitle(updatedTitle);
+		dto.setContent(updatedContent);
+
+		service.update(dto);
+
+		return "redirect:/community/list";
+	}
+
+	@PostMapping("delete")
+	public void delete(long idx){
+	service.delete(idx);
+		return ;
 	}
 }
