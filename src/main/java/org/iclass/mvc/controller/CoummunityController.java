@@ -45,4 +45,13 @@ public class CoummunityController {
 
 	}
 
+	@GetMapping("/write")
+	public void write(){
+
+	}
+	@GetMapping("/read")
+	public void read(PageRequestDTO pageRequestDTO, long idx, Model model){
+		Community community = service.read(idx);
+		model.addAttribute("dto",community);
+	}
 }

@@ -25,7 +25,7 @@ public class CommunityService {
 	public List<Community> pagelist(PageRequestDTO pageRequestDTO){
 
 		pageRequestDTO.setSize(5);		//한 페이지에 보이는 글의 갯수 설정
-		pageRequestDTO.setDates();		//start와 end 계산
+		pageRequestDTO.setData();		//start와 end 계산
 		List<Community> list = dao.pagelist(pageRequestDTO);		//글 목록
 
 		//페이지 목록 구현은 예정.
@@ -34,8 +34,8 @@ public class CommunityService {
 
 	// 페이지 목록과 글 목록을 저장하는 DTO를 리턴 타입으로 합니다.
 	public PageResponseDTO listWithSearch(PageRequestDTO pageRequestDTO){
-		pageRequestDTO.setSize(3);
-		pageRequestDTO.setDates();
+		pageRequestDTO.setSize(5);
+		pageRequestDTO.setData();
 		List<Community> list = dao.pagelist(pageRequestDTO);
 		PageResponseDTO responseDTO = PageResponseDTO.of(pageRequestDTO,dao.count(pageRequestDTO),10);
 		responseDTO.setList(list);
