@@ -4,6 +4,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.time.LocalDate;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.iclass.mvc.dto.Community;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,10 +49,8 @@ public class CoummunityController {
 	}
 
 	@GetMapping("/write")
-	public String write(Model model) {
-		PageRequestDTO pageRequestDTO = new PageRequestDTO();
-		model.addAttribute("pageRequestDTO", pageRequestDTO);
-		return "community/write";
+	public void write(Model model) {
+
 	}
 	@PostMapping("/write")
 	public String save(@ModelAttribute Community dto, RedirectAttributes reAttr) {
@@ -59,18 +60,16 @@ public class CoummunityController {
 		return "redirect:/community/list";
 	}
 
-	@GetMapping("/read")
+	@GetMapping({"/read","/update"})
 	public void read(PageRequestDTO pageRequestDTO, long idx, Model model){
 		Community community = service.read(idx);
 		model.addAttribute("dto",community);
+		//요청이 /read 이면 뷰 리졸버가 read.html로 요청 전달
+		//요청이 /update 이면 뷰 리졸버가 update.html로 요청 전달
+
 	}
 
-	@GetMapping("/update")
-	public void update(PageRequestDTO pageRequestDTO, long idx, Model model){
-		Community community = service.selectByIdx(idx);
-		model.addAttribute("dto",community);
-	}
-	@PostMapping("/update")
+	/*@PostMapping("/update")
 	public String save(@ModelAttribute("dto") Community dto) {
 		String updatedTitle = dto.getTitle();
 		String updatedContent = dto.getContent();
@@ -81,11 +80,32 @@ public class CoummunityController {
 		service.update(dto);
 
 		return "redirect:/community/list";
+	}*/
+	@PostMapping("/update") //pageRequestDTO를 파라미터로 받아서 수정 후에도 검색이유지되도록 합니다.
+		public String modify(PageRequestDTO pageRequestDTO, Community community ,
+		 RedirectAttributes redirectAttributes){
+			String link = pageRequestDTO.getLink();
+
+			service.update(community);
+			redirectAttributes.addFlashAttribute("result","글을 수정 했습니다.");
+			redirectAttributes.addAttribute("idx", community.getIdx());
+			return "redirect:/community/read?" + link;
+
+		}
+
+
+
+	@PostMapping("/delete")
+	public String remove(PageRequestDTO pageRequestDTO, Long idx, RedirectAttributes
+						 redirectAttributes){
+		service.delete(idx);
+		redirectAttributes.addFlashAttribute("result","글을 삭제했습니다.("+idx+ "번)");
+		return "redirect:/community/list?"+pageRequestDTO.getLink();
 	}
 
-	@PostMapping("delete")
+	/*@PostMapping("delete")
 	public void delete(long idx){
 	service.delete(idx);
 		return ;
-	}
+	}*/
 }
